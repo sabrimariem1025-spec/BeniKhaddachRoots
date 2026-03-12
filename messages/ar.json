@@ -1,0 +1,33 @@
+{
+  "header": {
+    "title": "بني خداش",
+    "subtitle": "اكتشف السياحة البديلة",
+    "allSites": "جميع المواقع",
+    "artisans": "الحرفيون",
+    "switchLang": "English"
+  },
+  "map": {
+    "legend": "دليل الخريطة",
+      "clickToExplore": "انقر على المواقع للاستكشاف"
+
+  },
+  "sidebar": {
+    "selectLocation": "اختر موقعاً",
+    "clickToLearn": "انقر على أي موقع لمعرفة المزيد",
+    "contact": "التواصل",
+    "rating": "التقييم"
+  },
+  "categories": {
+    "all": "الكل",
+    "archaeological": "المواقع الأثرية",
+    "artisans": "الحرفيون",
+    "guesthouses": "دور الضيافة",
+    "food": "الطعام"
+  },
+  "navigation": {
+  "archaeological": "المواقع الأثرية",
+  "artisans": "الحرفيون",
+  "guesthouses": "دور الضيافة",
+  "food": "الطعام المحلي"
+},"footer": { "madeWith": "صُنع بـ", "by": "بواسطة" }
+}

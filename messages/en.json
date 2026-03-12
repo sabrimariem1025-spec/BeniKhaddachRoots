@@ -1,0 +1,34 @@
+{
+  "header": {
+    "title": "Beni Khaddach",
+    "subtitle": "Discover Heritage Tourism",
+    "allSites": "All Sites",
+    "artisans": "Artisans",
+    "switchLang": "العربية"
+  },
+  "map": {
+    "legend": "Legend",
+      "clickToExplore": "Click on locations to explore"
+
+  },
+  "sidebar": {
+    "selectLocation": "Select a location",
+    "clickToLearn": "Click on any location to learn more",
+    "contact": "Contact",
+    "rating": "Rating"
+  },
+  "categories": {
+    "all": "All",
+    "archaeological": "Archaeological Sites",
+    "artisans": "Artisans",
+    "guesthouses": "Guesthouses",
+    "food": "Food"
+  },
+  "navigation": {
+  "archaeological": "Archaeological Sites",
+  "artisans": "Artisans",
+  "guesthouses": "Guesthouses",
+  "food": "Local Food"
+},"footer": { "madeWith": "Made with", "by": "by" }
+
+}

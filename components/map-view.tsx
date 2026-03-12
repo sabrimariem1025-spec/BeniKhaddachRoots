@@ -2,237 +2,191 @@
 
 import { useEffect, useRef } from 'react';
 import { Location } from '@/lib/locations-data';
+import { useTranslations } from 'next-intl';
 
 interface MapViewProps {
   locations: Location[];
   selectedLocation: string | null;
   onSelectLocation: (id: string) => void;
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'fr';
 }
 
 export function MapView({ locations, selectedLocation, onSelectLocation, language }: MapViewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const t = useTranslations();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Draw background - modern clean gradient
+    // ✅ Filtrer uniquement les guesthouses
+    const guesthouses = locations.filter((l) => l.type === 'guesthouse');
+
+    // Background
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#f8f6f3');
     gradient.addColorStop(1, '#faf8f5');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw subtle decorative lines for map feel
+    // Grid
     ctx.strokeStyle = '#e5dcd0';
     ctx.lineWidth = 0.5;
     ctx.globalAlpha = 0.15;
-
-    // Draw subtle grid pattern
     for (let i = 0; i < canvas.width; i += 60) {
-      ctx.beginPath();
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i, canvas.height);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
     }
-
     for (let i = 0; i < canvas.height; i += 60) {
-      ctx.beginPath();
-      ctx.moveTo(0, i);
-      ctx.lineTo(canvas.width, i);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
     }
-
     ctx.globalAlpha = 1;
 
-    // Calculate bounds for locations
-    const latitudes = locations.map((l) => l.latitude);
-    const longitudes = locations.map((l) => l.longitude);
+    if (guesthouses.length === 0) return;
 
+    // Bounds
+    const latitudes = guesthouses.map((l) => l.latitude);
+    const longitudes = guesthouses.map((l) => l.longitude);
     const minLat = Math.min(...latitudes);
     const maxLat = Math.max(...latitudes);
     const minLon = Math.min(...longitudes);
     const maxLon = Math.max(...longitudes);
-
     const latRange = maxLat - minLat || 0.01;
     const lonRange = maxLon - minLon || 0.01;
 
-    // Padding
-    const padding = 60;
+    const padding = 80;
     const mapWidth = canvas.width - padding * 2;
     const mapHeight = canvas.height - padding * 2;
 
-    // Draw locations with improved modern markers
-    locations.forEach((location) => {
-      // Normalize coordinates to canvas
+    // ✅ Dessiner chaque guesthouse avec sa photo
+    guesthouses.forEach((location) => {
       const x = padding + ((location.longitude - minLon) / lonRange) * mapWidth;
       const y = padding + ((maxLat - location.latitude) / latRange) * mapHeight;
 
-      // Color by type - improved palette
-      let color = '#8b6f47';
-      let accentColor = '#d4a574';
-      
-      if (location.type === 'site') {
-        color = '#8b6f47'; // Bronze
-        accentColor = '#b89968';
-      } else if (location.type === 'artisan') {
-        color = '#d4a574'; // Gold
-        accentColor = '#e8c9a0';
-      } else if (location.type === 'guesthouse') {
-        color = '#6b5d4f'; // Dark brown
-        accentColor = '#9d8b75';
-      }
+      const radius = 32;
+      const isSelected = selectedLocation === location.id;
 
-      // Draw marker with modern pin-like appearance
-      const markerSize = 20;
-      const shadowBlur = 8;
+      // Charger et dessiner l'image dans un cercle
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = location.logo || '/placeholder.svg';
 
-      // Draw subtle shadow
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
-      ctx.shadowBlur = shadowBlur;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 2;
+      img.onload = () => {
+        // Anneau extérieur (sélectionné = primary, sinon blanc)
+        ctx.beginPath();
+        ctx.arc(x, y, radius + 5, 0, Math.PI * 2);
+        ctx.fillStyle = isSelected ? '#8b6f47' : '#ffffff';
+        ctx.shadowColor = 'rgba(0,0,0,0.2)';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
 
-      // Draw outer glow/ring
-      ctx.beginPath();
-      ctx.arc(x, y, markerSize + 6, 0, Math.PI * 2);
-      ctx.fillStyle = color + '15';
-      ctx.fill();
+        // Clip circulaire pour la photo
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(img, x - radius, y - radius, radius * 2, radius * 2);
+        ctx.restore();
 
-      // Draw main marker circle
-      ctx.beginPath();
-      ctx.arc(x, y, markerSize, 0, Math.PI * 2);
-      ctx.fillStyle = color;
-      ctx.fill();
+        // Bordure blanche
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = isSelected ? '#8b6f47' : '#ffffff';
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
-      // Draw inner highlight
-      ctx.beginPath();
-      ctx.arc(x - 6, y - 6, 6, 0, Math.PI * 2);
-      ctx.fillStyle = accentColor;
-      ctx.globalAlpha = 0.4;
-      ctx.fill();
-      ctx.globalAlpha = 1;
+        // ✅ Nom de la maison d'hôte sous le cercle
+        const name = language === 'ar' ? location.nameAr : location.name;
+        
+        // Fond du label
+        ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif';
+        const textWidth = ctx.measureText(name).width;
+        const labelX = x - textWidth / 2 - 6;
+        const labelY = y + radius + 6;
 
-      // Draw border with accent
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.92)';
+        ctx.beginPath();
+        ctx.roundRect(labelX, labelY, textWidth + 12, 20, 4);
+        ctx.fill();
 
-      // Reset shadow
-      ctx.shadowColor = 'transparent';
+        ctx.strokeStyle = '#e5dcd0';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Texte du label
+        ctx.fillStyle = isSelected ? '#8b6f47' : '#3a3530';
+        ctx.textAlign = 'center';
+        ctx.fillText(name, x, labelY + 14);
+      };
+
+      // Fallback si image non chargée — cercle coloré
+      img.onerror = () => {
+        ctx.beginPath();
+        ctx.arc(x, y, radius + 5, 0, Math.PI * 2);
+        ctx.fillStyle = isSelected ? '#8b6f47' : '#d4a574';
+        ctx.fill();
+
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText('🏠', x, y + 5);
+      };
     });
 
-    // Draw modern legend with improved styling
-    const legendX = 20;
-    const legendY = canvas.height - 105;
-    const legendItemSpacing = 26;
-    const legendWidth = 200;
-    const legendHeight = 100;
-
-    // Draw legend background with subtle shadow
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
-    ctx.shadowBlur = 12;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 4;
-
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.roundRect(legendX - 10, legendY - 10, legendWidth, legendHeight, 8);
-    ctx.fill();
-
-    ctx.shadowColor = 'transparent';
-
-    // Draw subtle border
-    ctx.strokeStyle = '#e5dcd0';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    const legendItems = [
-      { label: 'Archaeological Sites', label_ar: 'المعالم الأثرية', color: '#8b6f47' },
-      { label: 'Artisans', label_ar: 'الحرفيين', color: '#d4a574' },
-      { label: 'Guesthouses', label_ar: 'دور الضيافة', color: '#6b5d4f' },
-    ];
-
-    ctx.font = 'regular 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-    ctx.textAlign = 'left';
-
-    legendItems.forEach((item, index) => {
-      const y = legendY + index * legendItemSpacing;
-      
-      // Draw marker in legend
-      ctx.fillStyle = item.color;
-      ctx.beginPath();
-      ctx.arc(legendX + 8, y + 6, 5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Draw label
-      ctx.fillStyle = '#3a3530';
-      ctx.fillText(language === 'en' ? item.label : item.label_ar, legendX + 22, y + 9);
-    });
   }, [locations, selectedLocation, language]);
 
   return (
     <div className='w-full'>
-      <div className='relative w-full h-96 bg-muted rounded-lg overflow-hidden cursor-pointer'>
+      <div className='relative w-full h-96 bg-muted rounded-lg overflow-hidden'>
         <canvas
           ref={canvasRef}
-          onClick={(e) => {
-            const canvas = canvasRef.current;
-            if (!canvas) return;
+       onClick={(e) => {
+  const canvas = canvasRef.current;
+  if (!canvas) return;
 
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
 
-            // Calculate bounds for locations
-            const latitudes = locations.map((l) => l.latitude);
-            const longitudes = locations.map((l) => l.longitude);
+  const guesthouses = locations.filter((l) => l.type === 'guesthouse');
 
-            const minLat = Math.min(...latitudes);
-            const maxLat = Math.max(...latitudes);
-            const minLon = Math.min(...longitudes);
-            const maxLon = Math.max(...longitudes);
+  const latitudes = guesthouses.map((l) => l.latitude);
+  const longitudes = guesthouses.map((l) => l.longitude);
+  const minLat = Math.min(...latitudes);
+  const maxLat = Math.max(...latitudes);
+  const minLon = Math.min(...longitudes);
+  const maxLon = Math.max(...longitudes);
+  const latRange = maxLat - minLat || 0.01;
+  const lonRange = maxLon - minLon || 0.01;
+  const padding = 80;
+  const mapWidth = canvas.width - padding * 2;
+  const mapHeight = canvas.height - padding * 2;
 
-            const latRange = maxLat - minLat || 0.01;
-            const lonRange = maxLon - minLon || 0.01;
+  guesthouses.forEach((location) => {
+    const locX = padding + ((location.longitude - minLon) / lonRange) * mapWidth;
+    const locY = padding + ((maxLat - location.latitude) / latRange) * mapHeight;
+    const distance = Math.sqrt((x - locX) ** 2 + (y - locY) ** 2);
 
-            const padding = 60;
-            const mapWidth = canvas.width - padding * 2;
-            const mapHeight = canvas.height - padding * 2;
+    if (distance < 37) {
+      // ✅ Sélectionne dans la sidebar
+      onSelectLocation(location.id);
 
-            // Check which location was clicked
-            locations.forEach((location) => {
-              const locX = padding + ((location.longitude - minLon) / lonRange) * mapWidth;
-              const locY = padding + ((maxLat - location.latitude) / latRange) * mapHeight;
-              const distance = Math.sqrt((x - locX) ** 2 + (y - locY) ** 2);
-
-              if (distance < 26) {
-                // Redirect to Google Maps with location
-                const query = encodeURIComponent(
-                  `${location.address} Beni Khaddach Tunisia`
-                );
-                const mapsUrl = `https://www.google.com/maps/search/${query}/@${location.latitude},${location.longitude},15z`;
-                window.open(mapsUrl, '_blank');
-              }
-            });
-          }}
+      // ✅ Ouvre Google Maps avec les coordonnées exactes
+      const mapsUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}&z=16&markers=${location.latitude},${location.longitude}`;
+      window.open(mapsUrl, '_blank');
+    }
+  });
+}}
           className='w-full h-full cursor-pointer'
         />
       </div>
       <p className='text-xs text-muted-foreground mt-2 text-center'>
-        {language === 'en' ? 'Click on locations to explore' : 'انقر على المواقع للاستكشاف'}
+        {t('map.clickToExplore')}
       </p>
     </div>
   );

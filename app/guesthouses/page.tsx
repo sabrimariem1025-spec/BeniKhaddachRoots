@@ -85,7 +85,7 @@ const guesthouses = [
 
 interface GuesthouseCardProps {
   guesthouse: (typeof guesthouses)[0];
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'fr';
   onSelect?: () => void;
 }
 
@@ -150,7 +150,7 @@ function GuesthouseCard({ guesthouse, language, onSelect }: GuesthouseCardProps)
 }
 
 export default function GuesthousesPage() {
-  const [language, setLanguage] = useState<'en' | 'ar'>('en');
+  const [language, setLanguage] = useState<'en' | 'ar' | 'fr'>('en');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const selectedGuesthouse = guesthouses.find((g) => g.id === selectedId);

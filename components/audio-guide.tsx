@@ -7,7 +7,7 @@ import { Volume2, Pause, Play } from 'lucide-react';
 
 interface AudioGuideProps {
   location: Location;
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'fr'; 
 }
 
 export function AudioGuide({ location, language }: AudioGuideProps) {

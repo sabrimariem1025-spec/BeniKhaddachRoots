@@ -11,7 +11,7 @@ interface GoogleMapProps {
   locations: Location[];
   selectedLocation: string | null;
   onSelectLocation: (id: string) => void;
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'fr';
 }
 
 // Simple marker clustering logic
@@ -62,7 +62,7 @@ function getMarkerColor(type: string): string {
   return '#8b6f47';
 }
 
-function openGoogleMaps(location: Location, language: 'en' | 'ar'): void {
+function openGoogleMaps(location: Location, language: 'en' | 'ar'|'fr'): void {
   const query = encodeURIComponent(
     `${location.address} Beni Khaddach Tunisia`
   );

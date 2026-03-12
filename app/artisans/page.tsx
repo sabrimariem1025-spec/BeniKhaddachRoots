@@ -114,7 +114,7 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
-  language: 'en' | 'ar';
+   language: 'en' | 'ar' | 'fr';
 }
 
 function ProductCard({ product, language }: ProductCardProps) {
@@ -180,13 +180,13 @@ export default function ArtisansPage() {
             </div>
           </div>
 
-          <Button
+          {/* <Button
             variant='outline'
             size='sm'
             onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
           >
             {language === 'en' ? 'العربية' : 'English'}
-          </Button>
+          </Button> */}
         </div>
       </header>
 

@@ -2,40 +2,21 @@
 
 import { Button } from '@/components/ui/button';
 import { MapPin, Users, Home, UtensilsCrossed } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface NavigationProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'fr';
 }
 
-export function Navigation({ activeCategory, onCategoryChange, language }: NavigationProps) {
+export function Navigation({ activeCategory, onCategoryChange }: NavigationProps) {
+const t = useTranslations('navigation');
+
   const categories = [
-    {
-      id: 'all',
-      label: { en: 'All Locations', ar: 'جميع المواقع' },
-      icon: MapPin,
-    },
-    {
-      id: 'site',
-      label: { en: 'Archaeological Sites', ar: 'المواقع الأثرية' },
-      icon: MapPin,
-    },
-    {
-      id: 'artisan',
-      label: { en: 'Artisans', ar: 'الحرفيون' },
-      icon: Users,
-    },
-    {
-      id: 'guesthouse',
-      label: { en: 'Guesthouses', ar: 'دور الضيافة' },
-      icon: Home,
-    },
-    {
-      id: 'food',
-      label: { en: 'Local Food', ar: 'الطعام المحلي' },
-      icon: UtensilsCrossed,
-    },
+    { id: 'site',       label: t('archaeological'), icon: MapPin          },
+    { id: 'artisan',    label: t('artisans'),       icon: Users           },
+    { id: 'guesthouse', label: t('guesthouses'),    icon: Home            },
   ];
 
   return (
@@ -57,9 +38,7 @@ export function Navigation({ activeCategory, onCategoryChange, language }: Navig
           >
             <Icon className='h-4 w-4' />
             <span className='hidden sm:inline text-sm'>
-              {language === 'en'
-                ? category.label.en
-                : category.label.ar}
+              {category.label}
             </span>
           </Button>
         );
