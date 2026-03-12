@@ -14,6 +14,7 @@ interface MapViewProps {
 export function MapView({ locations, selectedLocation, onSelectLocation, language }: MapViewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const t = useTranslations();
+  
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -62,7 +63,7 @@ export function MapView({ locations, selectedLocation, onSelectLocation, languag
     const mapWidth = canvas.width - padding * 2;
     const mapHeight = canvas.height - padding * 2;
 
-    // ✅ Dessiner chaque guesthouse avec sa photo
+    //   chaque guesthouse avec sa photo
     guesthouses.forEach((location) => {
       const x = padding + ((location.longitude - minLon) / lonRange) * mapWidth;
       const y = padding + ((maxLat - location.latitude) / latRange) * mapHeight;
@@ -70,10 +71,12 @@ export function MapView({ locations, selectedLocation, onSelectLocation, languag
       const radius = 32;
       const isSelected = selectedLocation === location.id;
 
-      // Charger et dessiner l'image dans un cercle
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.src = location.logo || '/placeholder.svg';
+      // Charger  l'image dans un cercle
+     const img = new Image();
+     img.crossOrigin = 'anonymous';
+img.src = location.logo || '/placeholder.svg';
+// img.src = location.logo || '/placeholder.svg';
+// img.loading = 'lazy';
 
       img.onload = () => {
         // Anneau extérieur (sélectionné = primary, sinon blanc)
@@ -100,11 +103,11 @@ export function MapView({ locations, selectedLocation, onSelectLocation, languag
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        // ✅ Nom de la maison d'hôte sous le cercle
-        const name = language === 'ar' ? location.nameAr : location.name;
-        
+const name = language === 'ar'
+  ? `${location.nameAr} ⭐${location.rating ?? ''}`
+  : `${location.name} ⭐${location.rating ?? ''}`;        
         // Fond du label
-        ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif';
+ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, sans-serif';
         const textWidth = ctx.measureText(name).width;
         const labelX = x - textWidth / 2 - 6;
         const labelY = y + radius + 6;
@@ -166,18 +169,16 @@ export function MapView({ locations, selectedLocation, onSelectLocation, languag
   const padding = 80;
   const mapWidth = canvas.width - padding * 2;
   const mapHeight = canvas.height - padding * 2;
-
+canvas.style.cursor = 'pointer';
   guesthouses.forEach((location) => {
     const locX = padding + ((location.longitude - minLon) / lonRange) * mapWidth;
     const locY = padding + ((maxLat - location.latitude) / latRange) * mapHeight;
     const distance = Math.sqrt((x - locX) ** 2 + (y - locY) ** 2);
 
     if (distance < 37) {
-      // ✅ Sélectionne dans la sidebar
       onSelectLocation(location.id);
 
-      // ✅ Ouvre Google Maps avec les coordonnées exactes
-      const mapsUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}&z=16&markers=${location.latitude},${location.longitude}`;
+const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`;
       window.open(mapsUrl, '_blank');
     }
   });
