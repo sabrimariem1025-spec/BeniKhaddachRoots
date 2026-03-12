@@ -52,7 +52,7 @@ export default function Home() {
             <Image
               src="/logo.png"
               alt="Beni Khaddach Roots Logo"
-              width={160}
+              width={200}
               height={160}
               className="object-contain"
             />
