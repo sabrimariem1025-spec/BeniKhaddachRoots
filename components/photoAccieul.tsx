@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 export default function PhotoAccueil() {
-  const images = ['/benikhadech.jpg', '/benikhadech2.jpg', '/kassour.jpg'];
+  const images = ['/benikhadech.jpg', '/benikhadech2.jpg', '/im2.jpg'];
 
   const [currentImage, setCurrentImage] = useState(0);
   const t = useTranslations();
