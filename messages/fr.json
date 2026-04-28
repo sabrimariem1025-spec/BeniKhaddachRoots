@@ -1,0 +1,30 @@
+{
+  "header": {
+    "title": "Les Racines de Beni Khaddach",
+    "subtitle": "Découvrez le tourisme patrimonial",
+    "switchLang": "العربية"
+  },
+  "sidebar": {
+    "selectLocation": "Sélectionnez un lieu",
+    "clickToLearn": "Cliquez sur un lieu pour en savoir plus",
+    "contact": "Contact",
+    "rating": "Note"
+  },
+  "categories": {
+    "all": "Tout",
+    "archaeological": "Sites archéologiques",
+    "artisans": "Artisans",
+    "guesthouses": "Maisons d'hôtes",
+    "food": "Nourriture"
+  },
+   "map": {
+    "clickToExplore": "Cliquez sur les lieux pour explorer"
+  },"navigation": {
+  "archaeological": "Sites archéologiques",
+  "artisans": "Artisans",
+  "guesthouses": "Maisons d'hôtes",
+  "food": "Cuisine locale"
+},
+"footer": { "madeWith": "Fait avec", "by": "par" }
+
+}
