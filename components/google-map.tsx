@@ -64,7 +64,7 @@ function getMarkerColor(type: string): string {
 
 function openGoogleMaps(location: Location, language: 'en' | 'ar'|'fr'): void {
   const query = encodeURIComponent(
-    `${location.address} Beni Khaddach Tunisia`
+    `${location.address} Beni Khedache Tunisia`
   );
   const url = `https://www.google.com/maps/search/${query}/@${location.latitude},${location.longitude},15z`;
   window.open(url, '_blank');
