@@ -150,8 +150,8 @@ longitude: 10.1834714,
   latitude: 33.2931,
   longitude: 10.1530,
 
-  image: '/ksarhallouf.jpg',
-  logo: '/ksarlogo.jpg',
+  image: '/im1.webp',
+  logo: '/im1.webp',
 
   audioStory: 'Ancient ksar used for storing grain and protecting families.',
   audioStoryAr: 'قصر قديم لتخزين الحبوب وحماية العائلات.',
@@ -160,7 +160,6 @@ longitude: 10.1834714,
   addressAr: 'جبال بني خداش، مدنين',
   addressFr: 'Montagnes de Beni Khaddach, Médenine',
 
-  rating: 4.7
 },
 {
   id: 'ksar-jouama',
@@ -178,8 +177,8 @@ longitude: 10.1834714,
   latitude: 33.2705,
   longitude: 10.1802,
 
-  image: '/ksarjouama.jpg',
-  logo: '/ksarlogo2.jpg',
+  image: '/im2.jpg',
+  logo: '/im2.jpg',
 
   audioStory: 'A heritage ksar reflecting the Amazigh lifestyle.',
   audioStoryAr: 'قصر تراثي يعكس نمط حياة الأمازيغ.',
@@ -188,35 +187,35 @@ longitude: 10.1834714,
   addressAr: 'بني خداش',
   addressFr: 'Beni Khaddach',
 
-  rating: 4.5
 },
 {
-  id: 'ain-beni-khaddach',
-  name: 'Ain Beni Khaddach',
-  nameAr: 'عين بني خداش',
-  nameFr: 'Source de Beni Khaddach',
+  id: 'ain-el-anba',
+  name: 'Ain El Anba',
+  nameAr: 'عين العنبة',
+  nameFr: 'Ain El Anba',
   type: 'site',
 
   owner: '',
 
-  description: 'Natural water spring surrounded by mountains and palm trees.',
-  descriptionAr: 'عين ماء طبيعية محاطة بالجبال والنخيل في بني خداش.',
-  descriptionFr: 'Source d’eau naturelle entourée de montagnes et palmiers.',
+  description: 'Ain El Anba is a mountain in Beni Khaddach distinguished by its beautiful natural landscape, steep rocky slopes, and natural caves that give it a unique and attractive character.',
+
+  descriptionAr: 'عين العنبة جبل في بني خداش يتميز بجمال طبيعته وتضاريسه الجبلية، ومنحدراته الصخرية ومغاراته الطبيعية التي تمنحه طابعًا مميزًا.',
+
+  descriptionFr: 'Ain El Anba est une montagne à Beni Khaddach qui se distingue par la beauté de son paysage naturel, ses pentes rocheuses abruptes et ses grottes naturelles qui lui donnent un caractère unique.',
 
   latitude: 33.2550,
   longitude: 10.1700,
 
-  image: '/ain.jpg',
-  logo: '/ainlogo.jpg',
+  image: '/im3.jpg',
+  logo: '/im3.jpg',
 
-  audioStory: 'A peaceful natural spring used by locals for generations.',
-  audioStoryAr: 'عين طبيعية هادئة يستعملها السكان منذ أجيال.',
+  audioStory: 'Ain El Anba is a mountain in Beni Khaddach known for its natural beauty, rocky slopes, and caves that make it a unique landscape.',
 
-  address: 'Beni Khaddach',
-  addressAr: 'بني خداش',
-  addressFr: 'Beni Khaddach',
+  audioStoryAr: 'عين العنبة جبل في بني خداش يتميز بجماله الطبيعي ومنحدراته الصخرية ومغاراته التي تعطيه طابعًا فريدًا.',
 
-  rating: 4.3
-},
+  address: 'Beni Khaddach, Médenine, Tunisia',
+  addressAr: 'بني خداش، مدنين، تونس',
+  addressFr: 'Beni Khaddach, Médenine, Tunisie',
 
+}
 ];
